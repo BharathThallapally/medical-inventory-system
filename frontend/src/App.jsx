@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import {
   getMedicines,
   getDashboardStats,
+  deleteMedicine,
 } from "./api";
+
 import AddMedicine from "./AddMedicine";
 import "./App.css";
 
@@ -156,15 +158,12 @@ function App() {
         medicine.medicineName
           ?.toLowerCase()
           .includes(search) ||
-
         medicine.manufacturer
           ?.toLowerCase()
           .includes(search) ||
-
         medicine.batchNumber
           ?.toLowerCase()
           .includes(search) ||
-
         medicine.category
           ?.toLowerCase()
           .includes(search)
@@ -184,6 +183,40 @@ function App() {
   };
 
   // =========================
+  // DELETE MEDICINE
+  // =========================
+
+  const handleDeleteMedicine = async (medicine) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${medicine.medicineName}"?\n\nThis action cannot be undone.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setError("");
+
+      // Delete medicine using database ID
+      await deleteMedicine(medicine.id);
+
+      // Refresh inventory and dashboard statistics
+      await refreshData();
+    } catch (error) {
+      console.error(
+        "Failed to delete medicine:",
+        error
+      );
+
+      setError(
+        error.response?.data?.message ||
+          "Failed to delete medicine. Please try again."
+      );
+    }
+  };
+
+  // =========================
   // USER INTERFACE
   // =========================
 
@@ -193,7 +226,6 @@ function App() {
       {/* ================= HEADER ================= */}
 
       <header className="header">
-
         <div>
           <h1>🏥 Medical Inventory</h1>
 
@@ -210,7 +242,6 @@ function App() {
         >
           + Add Medicine
         </button>
-
       </header>
 
       {/* ================= MAIN CONTENT ================= */}
@@ -240,7 +271,6 @@ function App() {
           {/* TOTAL MEDICINES */}
 
           <div className="card">
-
             <span className="card-icon">
               💊
             </span>
@@ -254,13 +284,11 @@ function App() {
                   : dashboardStats.totalMedicines}
               </h2>
             </div>
-
           </div>
 
           {/* LOW STOCK */}
 
           <div className="card">
-
             <span className="card-icon">
               📦
             </span>
@@ -274,13 +302,11 @@ function App() {
                   : dashboardStats.lowStock}
               </h2>
             </div>
-
           </div>
 
           {/* EXPIRING SOON */}
 
           <div className="card">
-
             <span className="card-icon">
               ⚠️
             </span>
@@ -294,13 +320,11 @@ function App() {
                   : dashboardStats.nearExpiry}
               </h2>
             </div>
-
           </div>
 
           {/* EXPIRED */}
 
           <div className="card">
-
             <span className="card-icon">
               🚨
             </span>
@@ -314,7 +338,6 @@ function App() {
                   : dashboardStats.expired}
               </h2>
             </div>
-
           </div>
 
         </section>
@@ -331,8 +354,7 @@ function App() {
               </h2>
 
               <p>
-                Manage your medicines and stock
-                levels
+                Manage your medicines and stock levels
               </p>
             </div>
 
@@ -359,7 +381,6 @@ function App() {
             <table>
 
               <thead>
-
                 <tr>
                   <th>Medicine</th>
                   <th>Manufacturer</th>
@@ -368,20 +389,19 @@ function App() {
                   <th>Expiry</th>
                   <th>Quantity</th>
                   <th>Price</th>
+                  <th>Actions</th>
                 </tr>
-
               </thead>
 
               <tbody>
 
-                {filteredMedicines.length >
-                0 ? (
+                {filteredMedicines.length > 0 ? (
 
                   filteredMedicines.map(
                     (medicine) => (
 
                       <tr
-                        key={medicine._id}
+                        key={medicine.id}
                       >
 
                         {/* MEDICINE */}
@@ -413,13 +433,11 @@ function App() {
                         {/* CATEGORY */}
 
                         <td>
-
                           <span className="category">
                             {
                               medicine.category
                             }
                           </span>
-
                         </td>
 
                         {/* EXPIRY */}
@@ -433,7 +451,6 @@ function App() {
                         {/* QUANTITY */}
 
                         <td>
-
                           <span
                             className={
                               Number(
@@ -447,7 +464,6 @@ function App() {
                               medicine.quantity
                             }
                           </span>
-
                         </td>
 
                         {/* PRICE */}
@@ -456,27 +472,37 @@ function App() {
                           ₹{medicine.price}
                         </td>
 
-                      </tr>
+                        {/* ACTIONS */}
 
+                        <td>
+                          <button
+                            type="button"
+                            className="delete-button"
+                            onClick={() =>
+                              handleDeleteMedicine(
+                                medicine
+                              )
+                            }
+                            title="Delete medicine"
+                          >
+                            🗑️ Delete
+                          </button>
+                        </td>
+
+                      </tr>
                     )
                   )
 
                 ) : (
 
                   !loading && (
-
                     <tr>
-
-                      <td colSpan="7">
-
+                      <td colSpan="8">
                         {searchTerm
                           ? "No medicines match your search."
                           : "No medicines found."}
-
                       </td>
-
                     </tr>
-
                   )
 
                 )}
@@ -504,19 +530,15 @@ function App() {
 
               <div
                 className="alert warning"
-                key={`low-${medicine._id}`}
+                key={`low-${medicine.id}`}
               >
-
                 <strong>
                   🔴 Low Stock:
                 </strong>{" "}
 
-                {medicine.medicineName}
-                {" "}has only{" "}
+                {medicine.medicineName} has only{" "}
 
-                {medicine.quantity}
-                {" "}units remaining.
-
+                {medicine.quantity} units remaining.
               </div>
 
             )
@@ -529,20 +551,17 @@ function App() {
 
               <div
                 className="alert warning"
-                key={`expiry-${medicine._id}`}
+                key={`expiry-${medicine.id}`}
               >
-
                 <strong>
                   🟠 Expiring Soon:
                 </strong>{" "}
 
-                {medicine.medicineName}
-                {" "}expires on{" "}
+                {medicine.medicineName} expires on{" "}
 
                 {new Date(
                   medicine.expiryDate
                 ).toLocaleDateString()}.
-
               </div>
 
             )
@@ -555,20 +574,17 @@ function App() {
 
               <div
                 className="alert danger"
-                key={`expired-${medicine._id}`}
+                key={`expired-${medicine.id}`}
               >
-
                 <strong>
                   ⚠️ Expired:
                 </strong>{" "}
 
-                {medicine.medicineName}
-                {" "}expired on{" "}
+                {medicine.medicineName} expired on{" "}
 
                 {new Date(
                   medicine.expiryDate
                 ).toLocaleDateString()}.
-
               </div>
 
             )
@@ -580,11 +596,9 @@ function App() {
             lowStockMedicines.length === 0 &&
             expiringSoonMedicines.length === 0 &&
             expiredMedicines.length === 0 && (
-
               <div className="alert">
                 ✅ No inventory alerts.
               </div>
-
             )}
 
         </section>
@@ -594,25 +608,20 @@ function App() {
       {/* ================= ADD MEDICINE ================= */}
 
       {showAddMedicine && (
-
         <AddMedicine
           onMedicineAdded={refreshData}
           onClose={() =>
             setShowAddMedicine(false)
           }
         />
-
       )}
 
       {/* ================= FOOTER ================= */}
 
       <footer>
-
         <p>
-          Medical Inventory Management System
-          © 2026
+          Medical Inventory Management System © 2026
         </p>
-
       </footer>
 
     </div>
