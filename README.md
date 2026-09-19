@@ -1,167 +1,192 @@
-# 💊 Medical Inventory System
+# 💊 Medical Inventory Management System
 
-A full-stack web application for managing medicines, monitoring inventory levels, and identifying expiry-related alerts.
+A full-stack web application designed to simplify **medicine inventory management, stock monitoring, and expiry tracking**.
 
-The system provides a simple interface for adding, updating, viewing, and managing medicines while automatically highlighting low-stock, expiring, and expired medicines.
+The application provides a centralized interface for managing medicines, monitoring stock levels, tracking expiry dates, and identifying inventory-related alerts in real time.
+
+> 🚀 Built as a practical full-stack project to gain hands-on experience with **React, Node.js, Express.js, REST APIs, MySQL-compatible databases, and cloud deployment**.
+
+---
 
 ## 🌐 Live Demo
 
-**Live Application:**  
+### 🚀 Live Application
 https://medical-inventory-frontend-xlw0.onrender.com
 
-**Backend API:**  
+### ⚙️ Backend API
 https://medical-inventory-system-cemq.onrender.com
 
-**GitHub Repository:**  
+### 💻 GitHub Repository
 https://github.com/BharathThallapally/medical-inventory-system
 
 ---
 
-## ✨ Features
+## 📸 Project Overview
 
-### 💊 Medicine Management
+The Medical Inventory Management System provides a simple dashboard for managing medicines and monitoring important inventory information.
 
-- Add new medicines
-- View all medicines
-- Update medicine information
-- Delete medicines
-- Track medicine quantity
-- Track batch numbers
-- Track manufacturers
-- Track categories
-- Track dosage and price
-- Track expiry dates
-
-### 📊 Dashboard
+### Dashboard
 
 The dashboard provides an overview of:
 
-- Total medicines
-- Expired medicines
-- Medicines expiring within 30 days
-- Low-stock medicines
+- 💊 Total medicines
+- 📦 Low-stock medicines
+- ⚠️ Medicines expiring soon
+- 🚨 Expired medicines
 
-### 🔔 Smart Reminders
+### Medicine Inventory
 
-The system identifies:
+Users can:
 
-- Low-stock medicines
-- Medicines expiring soon
-- Already expired medicines
+- Add medicines
+- View medicines
+- Search medicines
+- Update medicine information
+- Delete individual medicines
+- Monitor medicine quantities
+- Track batch numbers
+- Track manufacturers
+- Track categories
+- Track dosage
+- Track prices
+- Track expiry dates
 
-### 🔐 Data & Validation
+---
+
+## ✨ Key Features
+
+### 💊 Medicine Management
+
+Complete CRUD functionality for medicine inventory.
+
+- ➕ Add new medicines
+- 👀 View all medicines
+- 🔎 Search medicines
+- ✏️ Update medicine information
+- 🗑️ Delete individual medicines
+- 📦 Track available quantity
+- 🏷️ Track batch numbers
+- 🏭 Track manufacturers
+- 📂 Track medicine categories
+- 💉 Track dosage information
+- 💰 Track medicine prices
+- 📅 Track expiry dates
+
+---
+
+### 📊 Inventory Dashboard
+
+The dashboard provides a quick overview of inventory health.
+
+| Metric | Description |
+|---|---|
+| 💊 Total Medicines | Total medicines available in inventory |
+| 📦 Low Stock | Medicines with quantity at or below the low-stock threshold |
+| ⚠️ Expiring Soon | Medicines approaching their expiry date |
+| 🚨 Expired | Medicines that have already expired |
+
+---
+
+### 🔔 Inventory Alerts
+
+The system automatically identifies important inventory conditions.
+
+#### 🔴 Low Stock Alert
+
+Highlights medicines with low available quantities.
+
+#### 🟠 Expiring Soon Alert
+
+Identifies medicines that are approaching their expiry date.
+
+#### 🚨 Expired Alert
+
+Identifies medicines that have already passed their expiry date.
+
+---
+
+### 🔍 Medicine Search
+
+The inventory includes a search feature that allows users to quickly find medicines using:
+
+- Medicine name
+- Manufacturer
+- Batch number
+- Category
+
+---
+
+### 🛡️ Validation & Data Protection
+
+The application includes backend validation to help maintain reliable inventory data.
 
 - Required-field validation
 - Quantity validation
 - Price validation
 - Unique batch-number protection
-- Environment variables for sensitive configuration
-- CORS protection for frontend/backend communication
+- Environment variables for configuration
+- CORS protection
+- Database-level operations using parameterized SQL queries
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Technology Stack
 
 ### Frontend
 
-- React
-- Vite
-- Axios
-- CSS
+- ⚛️ React
+- ⚡ Vite
+- 🔗 Axios
+- 🎨 CSS
+- JavaScript
 
 ### Backend
 
-- Node.js
-- Express.js
-- REST API
-- CORS
+- 🟢 Node.js
+- 🚂 Express.js
+- 🔗 REST API
+- 🌐 CORS
 
 ### Database
 
-- TiDB Cloud
-- MySQL-compatible SQL
-- MySQL2
+- 🗄️ TiDB Cloud
+- 🐬 MySQL-compatible SQL
+- 🔌 MySQL2
 
-### Deployment
+### Development & Deployment
 
-- GitHub
-- Render
-- TiDB Cloud
+- 🐙 Git
+- 🐙 GitHub
+- 🚀 Render
+- ☁️ TiDB Cloud
 
 ---
 
-## 🏗️ Project Architecture
+## 🏗️ System Architecture
 
 ```text
-                    ┌─────────────────────┐
-                    │       User          │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   React Frontend    │
-                    │       + Vite        │
-                    └──────────┬──────────┘
-                               │
-                         REST API / Axios
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   Node.js + Express │
-                    │      Backend API     │
-                    └──────────┬──────────┘
-                               │
-                            mysql2
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │     TiDB Cloud      │
-                    │ MySQL-Compatible DB │
-                    └─────────────────────┘
-####
----
-
-## 📁 Project Structure
-
-```text
-medical-inventory-system/
-│
-├── backend/
-│   ├── config/
-│   │   └── db.js
-│   │
-│   ├── controllers/
-│   │   ├── dashboardController.js
-│   │   ├── medicineController.js
-│   │   └── reminderController.js
-│   │
-│   ├── database/
-│   │   └── init.js
-│   │
-│   ├── routes/
-│   │   ├── dashboardRoutes.js
-│   │   ├── medicineRoutes.js
-│   │   └── reminderRoutes.js
-│   │
-│   ├── server.js
-│   ├── testConnection.js
-│   ├── package.json
-│   └── .env.example
-│
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── AddMedicine.jsx
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   ├── api.js
-│   │   └── index.css
-│   │
-│   ├── package.json
-│   ├── vite.config.js
-│   └── .env.example
-│
-├── docs/
-├── .env.example
-├── .gitignore
-└── README.md
+                        ┌─────────────────────┐
+                        │        User         │
+                        └──────────┬──────────┘
+                                   │
+                                   ▼
+                        ┌─────────────────────┐
+                        │   React Frontend    │
+                        │       + Vite        │
+                        └──────────┬──────────┘
+                                   │
+                              Axios / REST API
+                                   │
+                                   ▼
+                        ┌─────────────────────┐
+                        │   Node.js + Express │
+                        │      Backend API    │
+                        └──────────┬──────────┘
+                                   │
+                                mysql2
+                                   │
+                                   ▼
+                        ┌─────────────────────┐
+                        │     TiDB Cloud      │
+                        │ MySQL-Compatible DB │
+                        └─────────────────────┘
